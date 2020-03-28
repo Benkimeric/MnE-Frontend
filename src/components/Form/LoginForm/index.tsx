@@ -11,6 +11,8 @@ interface Props {
 const LoginForm: React.FC<Props> = props => {
   const { handleLogin, isLoading } = props;
 
+  const [form] = Form.useForm();
+
   return (
     <FormComponent
       buttonText="Log in"
@@ -19,6 +21,7 @@ const LoginForm: React.FC<Props> = props => {
       className="login-form"
       initialValues={{ remember: true }}
       isLoading={isLoading}
+      form={form}
     >
       <Form.Item
         name="email"

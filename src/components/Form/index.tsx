@@ -12,9 +12,11 @@ interface Props {
   formName: string;
   className?: string;
   hasFooter?: boolean;
+  form: any;
+  isEditing?: boolean;
 }
 
-const FormComponent: React.FC<Props> = props => {
+const FormComponent: React.FC<Props> = (props) => {
   const {
     handleSubmit,
     isLoading,
@@ -24,8 +26,9 @@ const FormComponent: React.FC<Props> = props => {
     formName,
     className,
     hasFooter,
+    form,
+    isEditing,
   } = props;
-  const [form] = Form.useForm();
   const [, forceUpdate] = useState();
 
   // To disable submit button at the beginning.
@@ -39,6 +42,7 @@ const FormComponent: React.FC<Props> = props => {
 
   return (
     <Form
+      layout={'vertical'}
       form={form}
       name={formName}
       className={className}
@@ -48,21 +52,21 @@ const FormComponent: React.FC<Props> = props => {
       {children}
       {!hasFooter && (
         <Form.Item shouldUpdate={true}>
-        {() => (
-          <Button
-            type="primary"
-            htmlType="submit"
-            loading={isLoading}
-            disabled={
-              !form.isFieldsTouched(true) ||
-              form.getFieldsError().filter(({ errors }) => errors.length)
-                .length > 0
-            }
-          >
-            {buttonText}
-          </Button>
-        )}
-      </Form.Item>
+          {() => (
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={isLoading}
+              disabled={
+                (!isEditing && !form.isFieldsTouched(true)) ||
+                form.getFieldsError().filter(({ errors }: any) => errors.length)
+                  .length > 0
+              }
+            >
+              {buttonText}
+            </Button>
+          )}
+        </Form.Item>
       )}
     </Form>
   );
@@ -73,6 +77,7 @@ FormComponent.defaultProps = {
   className: '',
   isLoading: false,
   hasFooter: false,
+  isEditing: false,
 };
 
 export default FormComponent;

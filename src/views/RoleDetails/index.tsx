@@ -1,5 +1,4 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import { Popconfirm, Table } from 'antd';
+import { Form } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -7,6 +6,7 @@ import BackButton from '../../components/BackButton';
 import Button from '../../components/Button';
 import UserRoleForm from '../../components/Form/UserRoleForm';
 import Modal from '../../components/Modal';
+import RoleDetailsTable from '../../components/Table/RoleDetailsTable';
 import {
   closeModalAction,
   openModalAction,
@@ -16,7 +16,7 @@ import {
   deleteAssignedRole,
   getRole,
 } from '../../redux/actionCreator/roleActions';
-import { getUsers } from '../../redux/actionCreator/userActions';
+import { fetchUsers } from '../../redux/actionCreator/userActions';
 import {
   ModalStateInterface,
   RoleStateInterface,
@@ -60,60 +60,37 @@ const RoleDetails: React.FC<Props> = (props) => {
   const { role, isLoading, assignLoading } = userRole;
   const { users } = userState;
 
-  const [value, setValue] = useState('');
+  const [values, setValues] = useState({ email: '' });
 
   useEffect(() => {
     getRoleAction(roleId);
     getUsersAction();
   }, [getRoleAction, getUsersAction, roleId]);
 
-  const renderCreateFlightEstimateModal = () => {
+  const [form] = Form.useForm();
+
+  const renderAddUserRoleModal = () => {
+    setValues({ email: '' });
     openModal('Add User Role');
   };
 
+  const closeModalFunction = () => {
+    form.setFieldsValue({ email: '' });
+    closeModal();
+  };
+
   const handleSubmit = () => {
-    assignRoleAction({ roleId: role.id, email: value });
+    assignRoleAction({ roleId: role.id, email: values.email });
   };
 
   const handleChange = (data: string) => {
-    setValue(data);
+    setValues({ email: data });
   };
 
   const handleDelete = (data: any) => {
     const { email } = data;
     deleteAssignedRoleAction({ roleId: role.id, email });
   };
-
-  const columns = [
-    {
-      title: 'No.',
-      dataIndex: 'key',
-      key: 'key',
-    },
-    {
-      title: 'Name',
-      dataIndex: 'fullName',
-      key: 'fullName',
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-    },
-    {
-      title: 'Action',
-      dataIndex: 'operation',
-      render: (text: string, record: any): any =>
-        role.users.length > 0 ? (
-          <Popconfirm
-            title="Sure to remove?"
-            onConfirm={() => handleDelete(record)}
-          >
-            <a>Remove</a>
-          </Popconfirm>
-        ) : null,
-    },
-  ];
 
   role.users?.forEach((element: any, index: any) => {
     element.key = index + 1;
@@ -123,35 +100,32 @@ const RoleDetails: React.FC<Props> = (props) => {
     (element) => !element.roles?.map((role) => role.id).includes(role.id)
   );
 
-  const titleName = role.roleName ? `${role.roleName}s` : ''
+  const titleName = role.roleName ? `${role.roleName}s` : '';
   return (
     <div>
       <div className="header-buttons">
-          <BackButton history={history} backUrl={'/roles'} backText={titleName} />
-          <Button
-            onClick={renderCreateFlightEstimateModal}
-            buttonText="Add User"
-          />
+        <BackButton history={history} backUrl={'/roles'} backText={titleName} />
+        <Button onClick={renderAddUserRoleModal} buttonText="Add User" />
       </div>
       <Modal
         isVisible={shouldOpen && modalType === 'Add User Role'}
         title={`Add ${role.roleName || ''}`}
-        handleSubmit={closeModal}
-        handleClose={closeModal}
+        handleSubmit={closeModalFunction}
+        handleClose={closeModalFunction}
       >
         <UserRoleForm
           users={dropDownOption}
           handleSubmit={handleSubmit}
           isLoading={assignLoading}
           handleChange={handleChange}
-          value={value}
+          form={form}
         />
       </Modal>
-      <Table
+
+      <RoleDetailsTable
         loading={isLoading}
-        columns={columns}
-        dataSource={role.users}
-        pagination={{ pageSize: 10 }}
+        handleDelete={handleDelete}
+        data={role.users}
       />
     </div>
   );
@@ -167,7 +141,7 @@ const actionCreators = {
   getRoleAction: getRole,
   openModal: openModalAction,
   closeModal: closeModalAction,
-  getUsersAction: getUsers,
+  getUsersAction: fetchUsers,
   assignRoleAction: assignRole,
   deleteAssignedRoleAction: deleteAssignedRole,
 };
