@@ -4,7 +4,7 @@
   "rules": {
     "quotemark": [true, "single", "jsx-double"],
     "curly": true,
-    "lines-between-class-members": true,
+    "padding-line-between-statements": true,
     "object-literal-sort-keys": false,
     "ordered-imports": true,
     "member-ordering": false,
