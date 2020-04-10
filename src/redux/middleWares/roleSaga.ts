@@ -16,7 +16,7 @@ import {
   getRoleSuccess,
 } from '../actionCreator/roleActions';
 import {
-  getUsers,
+  fetchUsers,
 } from '../actionCreator/userActions';
 import { ASSIGN_ROLE, DELETE_ASSIGNED_ROLE, GET_ROLE,  GET_ROLES } from '../constants/actionTypes';
 import { BaseAction } from '../reducers/typed';
@@ -65,7 +65,7 @@ export function* assignRoleSaga(action: BaseAction) {
     const { message } = response.data;
     const findUser = users.find((element: any) => element.email === action.data.email)
     yield put(assignRoleSuccess(findUser));
-    yield put(getUsers());
+    yield put(fetchUsers());
     yield put(closeModalAction())
     toast.success(message);
   } catch (error) {
@@ -85,7 +85,7 @@ export function* deleteAssignedRoleSaga(action: BaseAction) {
     const response = yield call(RoleAPI.deleteUserRole, action.data);
     const { message } = response.data;
     yield put(deleteAssignedRoleSuccess(action.data.email));
-    yield put(getUsers());
+    yield put(fetchUsers());
     toast.success(message);
   } catch (error) {
     const errorMessage = apiErrorHandler(error);

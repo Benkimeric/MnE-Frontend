@@ -8,12 +8,12 @@ interface Props {
   handleSubmit: (data: any) => void;
   isLoading: boolean;
   users: any[];
-  value: string;
+  form: any;
   handleChange: (data: string) => void;
 }
 
-const UserRoleForm: React.FC<Props> = props => {
-  const { isLoading, users, handleSubmit, value, handleChange } = props;
+const UserRoleForm: React.FC<Props> = (props) => {
+  const { isLoading, users, handleSubmit, form, handleChange } = props;
 
   const [options, setOptions] = useState<{ value: string }[]>([]);
 
@@ -35,16 +35,28 @@ const UserRoleForm: React.FC<Props> = props => {
       formName="user-role-form"
       isLoading={isLoading}
       buttonText="Add User"
+      form={form}
     >
       <Form.Item
         name="email"
-        rules={[{ required: true, message: 'Please enter valid email' }]}
+        label={'Email'}
+        rules={[
+          { required: true, message: 'Please enter valid email' },
+          () => ({
+            validator(rule, value) {
+              if (value && emails.find(email => email.value === value.toLowerCase())) {
+                return Promise.resolve();
+              }
+              return Promise.reject(
+                'An account with that email does not exist'
+              );
+            },
+          }),
+        ]}
       >
         <AutoComplete
-          value={value}
           options={options}
           style={{}}
-          placeholder="Enter user email"
           onSearch={onSearch}
           onChange={onChange}
           filterOption={(inputValue, option: any) =>

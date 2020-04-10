@@ -5,7 +5,13 @@ import {
   watchGetRoleSaga,
   watchGetRolesSaga
 } from './roleSaga';
-import { watchGetAllUsersSaga, watchLoginUserSaga } from './userSaga';
+import {
+  watchAddUserSaga,
+  watchDeleteUserSaga,
+  watchEditUserSaga,
+  watchGetAllUsersSaga,
+  watchLoginUserSaga,
+} from './userSaga';
 
 export default function* rootSaga() {
   yield all([
@@ -15,5 +21,8 @@ export default function* rootSaga() {
     watchGetAllUsersSaga(),
     watchAssignRoleSaga(),
     watchDeleteAssignedRoleSaga(),
+    watchEditUserSaga(),
+    watchDeleteUserSaga(),
+    watchAddUserSaga(),
   ]);
 }

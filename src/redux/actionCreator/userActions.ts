@@ -1,7 +1,19 @@
-
 import {
-  GET_USERS, GET_USERS_FAILURE, GET_USERS_SUCCESS,
-   LOGIN_USER,  LOGIN_USER_FAILURE,  LOGIN_USER_SUCCESS,
+  ADD_USER,
+  ADD_USER_FAILURE,
+  ADD_USER_SUCCESS,
+  DELETE_USER,
+  DELETE_USER_FAILURE,
+  DELETE_USER_SUCCESS,
+  EDIT_USERS,
+  EDIT_USERS_FAILURE,
+  EDIT_USERS_SUCCESS,
+  FETCH_USERS,
+  FETCH_USERS_FAILURE,
+  FETCH_USERS_SUCCESS,
+  LOGIN_USER,
+  LOGIN_USER_FAILURE,
+  LOGIN_USER_SUCCESS,
 } from '../constants/actionTypes';
 
 // Login user actions
@@ -20,17 +32,66 @@ export const loginUserFailure = (error?: any) => ({
   error,
 });
 
-// Get users actions
-export const getUsers = () => ({
-  type: GET_USERS,
+// Fetch users actions
+export const fetchUsers = () => ({
+  type: FETCH_USERS,
 });
 
-export const getUsersSuccess = (response: any) => ({
-  type: GET_USERS_SUCCESS,
+export const fetchUsersSuccess = (response: any) => ({
+  type: FETCH_USERS_SUCCESS,
   response,
 });
 
-export const getUsersFailure = (error?: any) => ({
-  type: GET_USERS_FAILURE,
+export const fetchUsersFailure = (error?: any) => ({
+  type: FETCH_USERS_FAILURE,
+  error,
+});
+
+// Edit user actions
+export const editUsers = (data: any, userId: string) => ({
+  type: EDIT_USERS,
+  data,
+  userId,
+});
+
+export const editUsersSuccess = (response: any) => ({
+  type: EDIT_USERS_SUCCESS,
+  response,
+});
+
+export const editUsersFailure = (error: any) => ({
+  type: EDIT_USERS_FAILURE,
+  error,
+});
+
+// Delete user actions
+export const deleteUser = (userId: string) => ({
+  type: DELETE_USER,
+  userId,
+});
+
+export const deleteUserSuccess = (response: any) => ({
+  type: DELETE_USER_SUCCESS,
+  response,
+});
+
+export const deleteUserFailure = (error: any) => ({
+  type: DELETE_USER_FAILURE,
+  error,
+});
+
+// Add user actions
+export const addUser = (data: any) => ({
+  type: ADD_USER,
+  data,
+});
+
+export const addUserSuccess = (response: any) => ({
+  type: ADD_USER_SUCCESS,
+  response,
+});
+
+export const addUserFailure = (error: any) => ({
+  type: ADD_USER_FAILURE,
   error,
 });

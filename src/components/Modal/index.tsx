@@ -17,6 +17,7 @@ const ModalComponent: React.FC<Props> = props => {
   return (
     <div className="modalComponent">
       <Modal
+        forceRender
         title={title}
         centered
         visible={isVisible}
