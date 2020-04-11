@@ -2,6 +2,7 @@ import {
   ADD_USER,
   ADD_USER_FAILURE,
   ADD_USER_SUCCESS,
+  CURRENT_USER,
   DELETE_USER,
   DELETE_USER_FAILURE,
   DELETE_USER_SUCCESS,
@@ -13,7 +14,7 @@ import {
   FETCH_USERS_SUCCESS,
   LOGIN_USER,
   LOGIN_USER_FAILURE,
-  LOGIN_USER_SUCCESS,
+  LOGIN_USER_SUCCESS
 } from '../constants/actionTypes';
 
 // Login user actions
@@ -30,6 +31,12 @@ export const loginUserSuccess = (response: any) => ({
 export const loginUserFailure = (error?: any) => ({
   type: LOGIN_USER_FAILURE,
   error,
+});
+
+// Current user actions
+export const fetchUserData = (data: any) => ({
+  type: CURRENT_USER,
+  data,
 });
 
 // Fetch users actions

@@ -62,6 +62,7 @@ const Users = (props: any) => {
   const closeModalFunction = () => {
     form.setFieldsValue({ fullName: '', email: '', gender: null });
     closeModal();
+    setEditingKey('');
   };
 
   const renderEditUserModal = (data: any) => {
@@ -97,6 +98,7 @@ const Users = (props: any) => {
           handleChange={() => {}}
           form={form}
           isEditing={formName === 'Edit'}
+          editingKey={editingKey}
         />
       </Modal>
     </>

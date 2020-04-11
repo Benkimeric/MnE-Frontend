@@ -1,14 +1,10 @@
-import {
-  MenuOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from '@ant-design/icons';
-
+import { HomeOutlined, LogoutOutlined, MenuOutlined, UnorderedListOutlined, UserOutlined } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import { Avatar, Col, Row } from 'antd';
 import React from 'react';
-
+import { Link } from 'react-router-dom';
+import UtilsHelper from '../../helpers/utils';
+import { UserInterface } from '../../redux/reducers/typed';
 import styles from './SideBar.module.scss';
 
 const { Sider } = Layout;
@@ -16,10 +12,39 @@ const { Sider } = Layout;
 interface SidebarProps {
   collapse: boolean;
   clickToCollapse: () => void;
+  currentUser: UserInterface;
+  handleNavItemClick: (data: string) => void;
+  path: string;
 }
+
 const SideBar = (props: SidebarProps) => {
-  const { collapse, clickToCollapse } = props;
-  const { pathname } = window.location;
+  const {
+    collapse,
+    clickToCollapse,
+    currentUser,
+    handleNavItemClick,
+    path,
+  } = props;
+  const { fullName, roles } = currentUser;
+
+  const handleClick = (e: any) => {
+    handleNavItemClick(e);
+  };
+
+  const userRoles = roles?.map((role) => role.roleName);
+
+  const isLinkVisible = (allowedRoles: any[]) => {
+    let hasPermission;
+    if (allowedRoles) {
+      hasPermission =
+        userRoles && userRoles.some((role: any) => allowedRoles.includes(role));
+    }
+    const showItem = !allowedRoles || hasPermission;
+
+    return showItem;
+  };
+
+
   return (
     <Layout className={styles.sideBar}>
       <Sider
@@ -40,7 +65,7 @@ const SideBar = (props: SidebarProps) => {
 
         <Row className={styles.companyNameDiv}>
           <div>
-            <span className={styles.companyName}>Company Name</span>
+            <span className={styles.companyName}>MnE</span>
             <span onClick={clickToCollapse} className={styles.sideCollapseMenu}>
               <MenuOutlined />
             </span>
@@ -50,13 +75,13 @@ const SideBar = (props: SidebarProps) => {
         <Row className={styles.avatarDetails}>
           <Col span={8} className={styles.avatar}>
             <Avatar shape="circle" size={56}>
-              GK
+              {fullName && UtilsHelper.getInitials(fullName)}
             </Avatar>
           </Col>
           <Col span={16} className={styles.avatarUsername}>
-            <span className={styles.fullName}>Gregory Kay</span>
+            <span className={styles.fullName}>{fullName}</span>
             <br></br>
-            <span className={styles.role}>Administrator</span>
+            <span className={styles.role}>{roles?.[0].roleName || ''}</span>
           </Col>
         </Row>
 
@@ -65,29 +90,30 @@ const SideBar = (props: SidebarProps) => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={['3']}
+          defaultSelectedKeys={['dashboard']}
           style={{ backgroundColor: '#282828' }}
-          selectedKeys={[pathname]}
+          onClick={handleClick}
+          selectedKeys={[path]}
         >
-          <Menu.Item key="1" className={styles.menuItem}>
-            <UserOutlined />
-            <span>Home</span>
+          <Menu.Item key="dashboard" className={styles.menuItem}>
+            <HomeOutlined />
+            <Link to={'/dashboard'}>Dashboard</Link>
           </Menu.Item>
-          <Menu.Item key="2">
-            <VideoCameraOutlined />
-            <span>Candidates</span>
-          </Menu.Item>
-          <Menu.Item key="/dashboard">
-            <UploadOutlined />
-            <span>Users</span>
-          </Menu.Item>
-          <Menu.Item key="4">
-            <UploadOutlined />
-            <span>Schools</span>
-          </Menu.Item>
-          <Menu.Item key="5">
-            <UploadOutlined />
-            <span>Etc</span>
+          {isLinkVisible(['Super Administrator']) && (
+            <Menu.Item key="users">
+              <UserOutlined />
+              <Link to={'/users'}>Users</Link>
+            </Menu.Item>
+          )}
+          {isLinkVisible(['Super Administrator']) && (
+            <Menu.Item key="roles">
+              <UnorderedListOutlined />
+              <Link to={'/roles'}>Roles</Link>
+            </Menu.Item>
+          )}
+          <Menu.Item key="logout" className={styles.menuItem}>
+            <LogoutOutlined />
+            <Link to={'/'}>Logout</Link>
           </Menu.Item>
         </Menu>
       </Sider>
