@@ -11,12 +11,14 @@ interface Props {
   handleChange: (data: string) => void;
   form: any;
   isEditing: boolean;
+  editingKey: any;
 }
 
 const UserForm: React.FC<Props> = (props) => {
-  const { isLoading, handleSubmit, form, isEditing, users } = props;
+  const { isLoading, handleSubmit, form, isEditing, users, editingKey } = props;
 
-  const availableEmails = users.map((user) => user.email);
+  const filterOutEditedUser = isEditing ? users.filter(user => user.userId !== editingKey): users;
+  const availableEmails = filterOutEditedUser.map((user: any) => user.email);
 
   return (
     <FormComponent
@@ -32,7 +34,7 @@ const UserForm: React.FC<Props> = (props) => {
         label="Name"
         rules={[
           { required: true, message: 'Please input Name' },
-          { pattern: /^[A-Za-z]+$/, message: 'Please input a valid Name' },
+          { pattern: /^[A-Za-z\s]+$/, message: 'Please input a valid Name' },
         ]}
       >
         <Input />
@@ -45,7 +47,7 @@ const UserForm: React.FC<Props> = (props) => {
           { type: 'email', message: 'Please input a valid Email' },
           () => ({
             validator(rule, value) {
-              if (value && !availableEmails.includes(value.toLowerCase())) {
+              if (!availableEmails.includes(value.toLowerCase())) {
                 return Promise.resolve();
               }
               return Promise.reject(

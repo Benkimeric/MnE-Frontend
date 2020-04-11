@@ -3,4 +3,5 @@ export default interface RoutesInterface {
   exact: boolean;
   component: any;
   id: string;
+  allowedRoles: string[]
 }

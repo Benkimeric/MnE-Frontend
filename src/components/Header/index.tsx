@@ -7,9 +7,10 @@ const { Header: AntHeader } = Layout;
 interface HeaderProps {
   collapse: boolean;
   clickToCollapse: () => void;
+  path: string;
 }
 const Header = (props: HeaderProps) => {
-  const { clickToCollapse, collapse } = props;
+  const { clickToCollapse, collapse, path } = props;
 
   return (
     <AntHeader
@@ -27,7 +28,7 @@ const Header = (props: HeaderProps) => {
             <MenuOutlined />
           </span>
         )}
-        Dashboard
+        {path.toUpperCase()}
       </div>
     </AntHeader>
   );

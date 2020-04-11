@@ -2,31 +2,35 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import AuthenticationHelper from '../helpers/authentication';
 import Socket from '../helpers/socket';
-import { loginUserSuccess } from '../redux/actionCreator/userActions';
+import UtilsHelper from '../helpers/utils';
+import { UserStateInterface } from '../redux/reducers/typed';
 
 interface Props {
   history: any;
-  setCurrentUser: any;
+  usersData: UserStateInterface;
 }
 
-export default function(ComposedComponent: any) {
+export default function (ComposedComponent: any, allowedRoles: string[]) {
   const Authenticate: any = (props: Props) => {
-    const { history, setCurrentUser } = props;
+    const { history, usersData } = props;
+    const {
+      currentUser: { roles },
+    } = usersData;
 
     const token = localStorage.getItem('jwt-token');
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const verifyToken = () => {
       const decodedToken: any = AuthenticationHelper.decodeToken();
       const msg = 'Session Expired. Login to continue';
-      const { exp, userInfo } = decodedToken;
+      const { exp } = decodedToken;
       if (AuthenticationHelper.isExpired(exp)) {
         localStorage.setItem('url', history.location.pathname);
         AuthenticationHelper.logoutUser(history, msg);
         return false;
       }
-      setCurrentUser(userInfo);
-      Socket()
-      return true;
+      Socket();
+      return false;
     };
     useEffect(() => {
       if (token) {
@@ -38,19 +42,27 @@ export default function(ComposedComponent: any) {
           'Session Expired. Login to continue'
         );
       }
-      return () => {};
-    });
+      return () => {
 
-    return token && <ComposedComponent />;
+      };
+    }, [history, token, verifyToken]);
+
+    return (
+    token && roles &&
+      UtilsHelper.checkUserPermission(history, allowedRoles, roles) ? (
+        <ComposedComponent />
+      ): null
+    );
   };
 
   Authenticate.defaultProps = {
     history: {},
   };
 
-  const actionCreators = {
-    setCurrentUser: loginUserSuccess,
-  };
+  const mapStateToProps = ({ user }: any) => ({
+    usersData: user,
+  });
 
-  return connect(null, actionCreators)(Authenticate);
+
+  return connect(mapStateToProps)(Authenticate);
 }

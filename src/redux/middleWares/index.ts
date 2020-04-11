@@ -7,6 +7,7 @@ import {
 } from './roleSaga';
 import {
   watchAddUserSaga,
+  watchCurrentUsersSaga,
   watchDeleteUserSaga,
   watchEditUserSaga,
   watchGetAllUsersSaga,
@@ -24,5 +25,6 @@ export default function* rootSaga() {
     watchEditUserSaga(),
     watchDeleteUserSaga(),
     watchAddUserSaga(),
+    watchCurrentUsersSaga(),
   ]);
 }

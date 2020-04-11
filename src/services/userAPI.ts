@@ -8,6 +8,10 @@ class UserAPI {
     return axios.post(`${baseUrl}/login`, userData);
   }
 
+  static currentUser(userId: any) {
+    return axios.get(`${baseUrl}/user/${userId}`);
+  }
+
   static fetchUsers() {
     return axios.get(`${baseUrl}/users`);
   }

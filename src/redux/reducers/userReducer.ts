@@ -2,6 +2,7 @@ import {
   ADD_USER,
   ADD_USER_FAILURE,
   ADD_USER_SUCCESS,
+  CURRENT_USER,
   DELETE_USER,
   DELETE_USER_FAILURE,
   DELETE_USER_SUCCESS,
@@ -32,6 +33,11 @@ const loginUserReducer = (state = initialState, action: BaseAction) => {
         ...state,
         isLoading: true,
       };
+      case CURRENT_USER:
+        return {
+          ...state,
+          isLoading: true,
+        };
     case LOGIN_USER_SUCCESS:
       return {
         ...state,

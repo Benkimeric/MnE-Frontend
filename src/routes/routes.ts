@@ -10,24 +10,28 @@ const routes: RoutesInterface[] = [
     exact: true,
     component: Dashboard,
     id: 'home',
+    allowedRoles: [],
   },
   {
     path: '/users',
     exact: true,
     component: Users,
     id: 'users',
+    allowedRoles: ['Super Administrator'],
   },
   {
     path: '/roles',
     exact: true,
     component: Roles,
     id: 'roles',
+    allowedRoles: ['Super Administrator'],
   },
   {
     path: '/roles/:roleId',
     exact: true,
     component: RoleDetails,
     id: 'roleDetails',
+    allowedRoles: ['Super Administrator'],
   },
 ];
 

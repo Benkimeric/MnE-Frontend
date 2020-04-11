@@ -21,6 +21,7 @@ import {
 } from '../actionCreator/userActions';
 import {
   ADD_USER,
+  CURRENT_USER,
   DELETE_USER,
   EDIT_USERS,
   FETCH_USERS,
@@ -44,7 +45,7 @@ export function* loginUserSaga(action: BaseAction) {
     setTimeout(() => {
       history.push(url || '/dashboard');
       localStorage.removeItem('url');
-    }, 2000);
+    }, 0);
   } catch (error) {
     const errorMessage = apiErrorHandler(error);
     toast.error(errorMessage);
@@ -54,6 +55,22 @@ export function* loginUserSaga(action: BaseAction) {
 
 export function* watchLoginUserSaga() {
   yield takeLatest(LOGIN_USER, loginUserSaga);
+}
+
+// CURRENT USERS
+export function* currentUserSaga(action: BaseAction) {
+  try {
+    const response = yield call(UserAPI.currentUser, action.data);
+    const { data } = response.data;
+    yield put(loginUserSuccess(data.user));
+  } catch (error) {
+    const errorMessage = apiErrorHandler(error);
+    yield put(loginUserFailure(errorMessage));
+  }
+}
+
+export function* watchCurrentUsersSaga() {
+  yield takeLatest(CURRENT_USER, currentUserSaga);
 }
 
 // GET ALL USERS
