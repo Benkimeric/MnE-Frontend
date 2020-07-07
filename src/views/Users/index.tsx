@@ -1,6 +1,6 @@
 import { Form } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import Button from '../../components/Button';
 import UserForm from '../../components/Form/UserForm';
 import Modal from '../../components/Modal';
@@ -17,6 +17,7 @@ import {
 } from '../../redux/actionCreator/userActions';
 
 import './Users.scss';
+import { getHouseholds } from '../../redux/actionCreator/householdActions';
 
 const Users = (props: any) => {
   const {
@@ -34,9 +35,14 @@ const Users = (props: any) => {
   const [editingKey, setEditingKey] = useState('');
   const [formName, setFormName] = useState('Add');
 
+  const dispatch = useDispatch()
+
+
+
   useEffect(() => {
     fetchUsersAction();
-  }, [fetchUsersAction]);
+    dispatch(getHouseholds())
+  }, [dispatch, fetchUsersAction]);
 
   const [form] = Form.useForm();
 
