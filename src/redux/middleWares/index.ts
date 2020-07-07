@@ -1,4 +1,5 @@
 import { all } from 'redux-saga/effects';
+import { watchGetAllHouseholdsSaga } from './householdSaga';
 import {
   watchAssignRoleSaga,
   watchDeleteAssignedRoleSaga,
@@ -26,5 +27,6 @@ export default function* rootSaga() {
     watchDeleteUserSaga(),
     watchAddUserSaga(),
     watchCurrentUsersSaga(),
+    watchGetAllHouseholdsSaga(),
   ]);
 }

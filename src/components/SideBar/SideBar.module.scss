@@ -10,7 +10,12 @@
     background: $dark-gray;
     line-height: 64px;
     text-align: center;
-    padding-left: 24px;
+    /* padding-left: 24px; */
+    display: grid;
+    /* justify-content: space-around; */
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+    padding: 0 25px;
   }
 
   .sideCollapseMenu {
@@ -39,7 +44,7 @@
   }
 
   .role {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .title {
