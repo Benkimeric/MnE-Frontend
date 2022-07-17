@@ -44,7 +44,6 @@ const SideBar = (props: SidebarProps) => {
     return showItem;
   };
 
-
   return (
     <Layout className={styles.sideBar}>
       <Sider
@@ -64,12 +63,10 @@ const SideBar = (props: SidebarProps) => {
         <div className="logo" />
 
         <Row className={styles.companyNameDiv}>
-          <div>
             <span className={styles.companyName}>MnE</span>
             <span onClick={clickToCollapse} className={styles.sideCollapseMenu}>
               <MenuOutlined />
             </span>
-          </div>
         </Row>
 
         <Row className={styles.avatarDetails}>

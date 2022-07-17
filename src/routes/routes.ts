@@ -33,6 +33,13 @@ const routes: RoutesInterface[] = [
     id: 'roleDetails',
     allowedRoles: ['Super Administrator'],
   },
+  {
+    path: '/roles/:roleId',
+    exact: true,
+    component: RoleDetails,
+    id: 'roleDetails',
+    allowedRoles: ['Super Administrator'],
+  },
 ];
 
 export default routes;
